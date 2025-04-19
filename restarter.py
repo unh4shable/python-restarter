@@ -1,11 +1,10 @@
-import time, os
-import subprocess, signal
+import subprocess, time
 
 def restart_script():
     while True:
+        start_time = time.time()
         try:
             process = subprocess.Popen(["python", "main.py"])
-            start_time = time.time()
 
             while True:
                 if process.poll() is not None:
@@ -24,6 +23,10 @@ def restart_script():
 
         except Exception as e:
             print(f"Error running | {e}")
+
+        total_elapsed = time.time() - start_time
+        if total_elapsed < 30 * 60:
+            time.sleep(30 * 60 - total_elapsed)
 
 if __name__ == "__main__":
     restart_script()
